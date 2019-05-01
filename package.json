@@ -1,0 +1,17 @@
+{
+  "name": "verifytoken",
+  "version": "1.0.0",
+  "description": "Verify JWT Token against public key",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Wilhelm Vortisch <wilhelm@v-software.de>",
+  "license": "ISC",
+  "dependencies": {
+    "command-line-args": "^5.1.1",
+    "command-line-usage": "^5.0.5",
+    "jsonwebtoken": "^8.5.1"
+  }
+}
