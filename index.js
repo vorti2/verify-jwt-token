@@ -1,3 +1,4 @@
+const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const commandLineArgs = require('command-line-args');
 const commandLineUsage = require('command-line-usage');
@@ -63,10 +64,10 @@ if (options.help || !options.token || !options.cert) {
 }
 
 try {
-    const cert = fs.readFileSync(options.cert);
-    const token = fs.readFileSync(options.token); 
+    const cert = fs.readFileSync(options.cert, 'utf8');
+    const token = fs.readFileSync(options.token, 'utf8'); 
     const decoded = jwt.verify(token, cert);
     console.log(`JWT decoded and verifyed: ${JSON.stringify(decoded)}`);
 } catch (err) {
-    console.error(err);
+    console.error(err.message);
 }
