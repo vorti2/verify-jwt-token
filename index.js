@@ -14,14 +14,21 @@ const sections = [{
                 typeLabel: '{underline file}',
                 alias: 't',
                 type: String,
-               description: 'JWT Token to verify'
+                description: 'JWT Token to verify'
             },
             {
                 name: 'cert',
                 alias: 'c',
                 type: String,
                 typeLabel: '{underline file}',
-                description: 'Certificate (in .pem format) to test if the signature of the JWT is valid'
+                description: 'Certificate to test if the signature of the JWT is valid'
+            },
+            {
+                name: 'audience',
+                alias: 'a',
+                type: String,
+                typeLabel: '{underline string}',
+                description: 'audience to test'
             },
             {
                 name: 'help',
@@ -47,6 +54,11 @@ const optionDefinitions = [{
         type: String
     },
     {
+        name: 'audience',
+        alias: 'a',
+        type: String
+    },
+    {
         name: 'help',
         alias: 'h',
         type: Boolean
@@ -65,9 +77,20 @@ if (options.help || !options.token || !options.cert) {
 
 try {
     const cert = fs.readFileSync(options.cert, 'utf8');
-    const token = fs.readFileSync(options.token, 'utf8'); 
-    const decoded = jwt.verify(token, cert);
+    const token = fs.readFileSync(options.token, 'utf8');
+    const verifyOptions = {};
+    if (options.audience) {
+        verifyOptions.audience = options.audience;
+    }
+    const decoded = jwt.verify(token, cert, verifyOptions);
     console.log(`JWT decoded and verifyed: ${JSON.stringify(decoded)}`);
+    if (verifyOptions.audience) {
+        console.log(`  including audience "${verifyOptions.audience}"`);
+    }
 } catch (err) {
     console.error(err.message);
+    const token = fs.readFileSync(options.token, 'utf8');
+    var decoded = jwt.decode(token, {complete: true});
+    console.log(decoded.header);
+    console.log(decoded.payload);
 }
